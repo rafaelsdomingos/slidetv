@@ -9,6 +9,6 @@ class Slide extends Model
     protected $fillable = [
         'name',
         'url',
-        'active'
+        'active',
     ];
 }

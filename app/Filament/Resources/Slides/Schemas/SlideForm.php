@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Slides\Schemas;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\FileUpload;
 
 class SlideForm
 {
@@ -12,10 +13,15 @@ class SlideForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
+                FileUpload::make('url')
+                    ->columnSpanFull()
+                    ->disk('public')
+                    ->visibility('public')
+                    ->image()
+                    ->downloadable()
+                     ->maxSize(5120)
                     ->required(),
-                TextInput::make('url')
-                    ->url()
+                TextInput::make('name')
                     ->required(),
                 Toggle::make('active')
                     ->required(),
