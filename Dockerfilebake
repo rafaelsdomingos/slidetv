@@ -47,9 +47,25 @@ RUN composer install \
     --prefer-dist \
     --no-interaction \
     --optimize-autoloader
+#RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
 # -----------------------------------------------------
-#  Stage 4 — Aplicação Laravel final
+#  Stage 3 — Build dos assets com Node (Vite)
+# -----------------------------------------------------
+FROM node:24-alpine AS frontend
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+
+# -----------------------------------------------------
+#  Stage 4 — Aplicação Laravel final (leve)
 # -----------------------------------------------------
 FROM php-base AS php-prod
 
@@ -65,9 +81,24 @@ COPY --from=php-deps /var/www/html/vendor ./vendor
 COPY --from=frontend /app/public/build ./public/build
 
 # Ajusta permissões
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www && composer install
 
 # Porta padrão do PHP-FPM
 EXPOSE 9000
 
 CMD ["php-fpm"]
+
+
+# -----------------------------------------------------
+#  Stage 5 — Imagem Nginx com Alpine
+# -----------------------------------------------------
+FROM nginx:alpine AS nginx-prod
+
+# Copia os arquivos estáticos da imagem php de produção
+COPY --from=php-prod /var/www/public /var/www/public
+
+WORKDIR /var/www/public
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
