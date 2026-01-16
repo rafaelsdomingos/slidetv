@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Filament\Pages;
+
+use Filament\Pages\Dashboard as BaseDashboard;
+use BackedEnum;
+
+class Dashboard extends BaseDashboard
+{
+    protected static ?string $title = 'Slides das TVs';
+
+    protected static ?string $navigationLabel = 'Dashboard';
+
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-photo';
+
+}
