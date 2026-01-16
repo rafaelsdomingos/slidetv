@@ -22,6 +22,7 @@ class SlideForm
                      ->maxSize(5120)
                     ->required(),
                 TextInput::make('name')
+                    ->label('Nome')
                     ->required(),
                 Toggle::make('active')
                     ->required(),
