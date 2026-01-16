@@ -49,6 +49,20 @@ RUN composer install \
     --optimize-autoloader
 
 # -----------------------------------------------------
+#  Stage 3 — Build dos assets com Node (Vite)
+# -----------------------------------------------------
+FROM node:24-alpine AS frontend
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+# -----------------------------------------------------
 #  Stage 4 — Aplicação Laravel final
 # -----------------------------------------------------
 FROM php-base AS php-prod
