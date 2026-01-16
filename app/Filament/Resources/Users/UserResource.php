@@ -22,6 +22,8 @@ class UserResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    protected static ?string $modelLabel = 'Usuário';
+
     public static function form(Schema $schema): Schema
     {
         return UserForm::configure($schema);
@@ -46,5 +48,10 @@ class UserResource extends Resource
             'create' => CreateUser::route('/create'),
             'edit' => EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return 'Administração';
     }
 }
